@@ -254,6 +254,7 @@ public:
     nvinfer1::TacticSources disabledTactics{0};
     TimingCacheMode timingCacheMode{TimingCacheMode::kLOCAL};
     std::string timingCacheFile{};
+    std::string algorithmSelectorCacheFile;
     bool errorOnTimingCacheMiss{false};
     // C++11 does not automatically generate hash function for enum class.
     // Use int32_t to support C++11 compilers.
@@ -360,6 +361,7 @@ public:
     bool fp8{false};
     bool int4{false};
     std::string calibFile{};
+    std::string algorithmSelectorCacheFile;
     std::vector<std::string> plugins;
     bool standard{false};
     TimingCacheMode timingCacheMode{TimingCacheMode::kLOCAL};

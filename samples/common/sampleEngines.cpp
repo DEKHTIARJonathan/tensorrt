@@ -38,6 +38,7 @@
 #include "sampleEngines.h"
 #include "sampleOptions.h"
 #include "sampleUtils.h"
+#include "sampleAlgorithmSelector.h"
 
 using namespace nvinfer1;
 
@@ -1174,6 +1175,26 @@ bool networkToSerializedEngine(
     {
         timingCache
             = samplesCommon::buildTimingCacheFromFile(gLogger.getTRTLogger(), *config, build.timingCacheFile, err);
+    }
+
+    std::unique_ptr<IAlgorithmSelector> selector;
+    // read cache if algorithmSelectorCacheFile exist, otherwise write
+    if (!build.algorithmSelectorCacheFile.empty()) {
+        std::ifstream iFile(build.algorithmSelectorCacheFile, std::ios::in | std::ios::binary);
+        //file exist, only check whether exist, won't read
+        if (iFile)
+        {
+            iFile.close();
+            sample::gLogInfo << "Loaded  algorithmSelectorCacheFile from:  " <<build.algorithmSelectorCacheFile << std::endl;
+            selector.reset(new AlgorithmCacheReader(build.algorithmSelectorCacheFile));
+
+        }
+        else
+        {
+            sample::gLogInfo << "Write  algorithmSelectorCacheFile to:  " <<build.algorithmSelectorCacheFile << std::endl;
+            selector.reset(new AlgorithmCacheWriter(build.algorithmSelectorCacheFile));
+        }
+        config->setAlgorithmSelector(selector.get());
     }
 
     // CUDA stream used for profiling by the builder.

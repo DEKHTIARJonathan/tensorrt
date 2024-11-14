@@ -1429,6 +1429,8 @@ void BuildOptions::parse(Arguments& arguments)
         }
     }
 
+    getAndDelOption(arguments, "--algorithmSelectorCacheFile", algorithmSelectorCacheFile);
+
     bool noBuilderCache{false};
     getAndDelOption(arguments, "--noBuilderCache", noBuilderCache);
     getAndDelOption(arguments, "--timingCacheFile", timingCacheFile);
@@ -2175,6 +2177,7 @@ std::ostream& operator<<(std::ostream& os, const BuildOptions& options)
           "Tactic sources: ";   printTacticSources(os, options.enabledTactics, options.disabledTactics)                 << std::endl <<
           "timingCacheMode: ";  printTimingCache(os, options.timingCacheMode)                                           << std::endl <<
           "timingCacheFile: " << options.timingCacheFile                                                                << std::endl <<
+          "algorithmSelectorCacheFile: " << options.algorithmSelectorCacheFile                                          << std::endl <<
           "Enable Compilation Cache: "<< boolToEnabled(!options.disableCompilationCache) << std::endl <<
           "Enable Monitor Memory: "<< boolToEnabled(options.enableMonitorMemory) << std::endl <<
           "errorOnTimingCacheMiss: "  << boolToEnabled(options.errorOnTimingCacheMiss)                                  << std::endl <<
@@ -2550,6 +2553,7 @@ void BuildOptions::help(std::ostream& os)
           "  --noCompilationCache               Disable Compilation cache in builder, and the cache is part of timing cache (default is to enable compilation cache)"                                                "\n"
           "  --errorOnTimingCacheMiss           Emit error when a tactic being timed is not present in the timing cache (default = false)"          "\n"
           "  --timingCacheFile=<file>           Save/load the serialized global timing cache"                                                       "\n"
+          "  --algorithmSelectorCacheFile=<file>    Save/load the algorithmSelector cache"                                                          "\n"
           "  --preview=features                 Specify preview feature to be used by adding (+) or removing (-) preview features from the default" "\n"
           R"(                                   Preview Features: features ::= [","feature])"                                                       "\n"
           "                                                       feature  ::= (+|-)flag"                                                           "\n"
@@ -2785,6 +2789,7 @@ void SafeBuilderOptions::printHelp(std::ostream& os)
           "  --help or -h                Print this message"                                                                                 << std::endl <<
           "  --noBuilderCache            Disable timing cache in builder (default is to enable timing cache)"                                << std::endl <<
           "  --timingCacheFile=<file>    Save/load the serialized global timing cache"                                                       << std::endl <<
+          "  --algorithmSelectorCacheFile=<file>     Save/load the algorithmSelector cache"                                                  << std::endl <<
           "  --sparsity=spec             Control sparsity (default = disabled). "                                                            << std::endl <<
           R"(                              Sparsity: spec ::= "disable", "enable", "force")"                                                 << std::endl <<
           "                              Note: Description about each of these options is as below"                                          << std::endl <<
